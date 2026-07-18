@@ -1,32 +1,64 @@
-# React + TypeScript + Vite
+# HabitBuddy
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+HabitBuddy is a lightweight habit and activity tracker built with React, TypeScript, Vite, Tailwind CSS, and Supabase. The app lets you create reusable event types, then log scores and notes for any day in a day, week, or month calendar view.
 
-Currently, two official plugins are available:
+## Current features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Day, week, and month calendar navigation
+- Quick add and edit flows for daily entries
+- Detail view for existing entries with remove support
+- Event type management with custom icons and colors
+- Light/dark theme switching
+- Supabase-backed persistence with a local fallback repository still available in the codebase
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 + TypeScript
+- Vite
+- Tailwind CSS
+- Supabase JS client
+- date-fns and lucide-react
 
-## Expanding the Oxlint configuration
+## Getting started
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Create a local environment file with your Supabase credentials:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Then fill in:
+   ```env
+   VITE_SUPABASE_URL=https://your-project.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Build for production:
+   ```bash
+   npm run build
+   ```
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+## Available scripts
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- `npm run dev` — start the Vite dev server
+- `npm run build` — compile TypeScript and build the production bundle
+- `npm run lint` — run the Oxlint checks
+- `npm run preview` — preview the production build locally
+
+## Project structure
+
+- `src/App.tsx` — top-level app shell and screen switching
+- `src/components/calendar` — day, week, month calendar views and modal interactions
+- `src/components/eventTypes` — event type creation and editing UI
+- `src/components/quickAdd` and `src/components/logDetail` — entry logging and detail flows
+- `src/data` — repository abstraction plus Supabase and local storage implementations
+- `src/hooks/useTheme.ts` — persisted light/dark mode state
+
+## Data layer
+
+The app uses a repository abstraction in `src/data/repository.ts`. The active implementation is `SupabaseRepository`, which is wired in `src/data/index.ts`. A `LocalStorageRepository` remains available as a fallback if you need to switch away from Supabase.

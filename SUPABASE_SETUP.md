@@ -1,24 +1,22 @@
-# Phase 2 — Supabase (done)
+# Supabase setup for HabitBuddy
 
-The app now runs against a live Supabase project instead of `localStorage`. This doc
-records what's live so it's easy to reproduce or extend later.
+HabitBuddy currently uses Supabase as its primary persistence layer. The app reads and writes event types and daily log entries through the repository abstraction in `src/data`, with the active implementation pointing at Supabase.
+
+## Current configuration
 
 - Project: `sllhqmvoxwuobijgerjz` (https://sllhqmvoxwuobijgerjz.supabase.co)
-- Credentials live in `.env.local` (gitignored, not committed):
-  ```
+- Environment variables are expected in `.env.local`:
+  ```env
   VITE_SUPABASE_URL=https://sllhqmvoxwuobijgerjz.supabase.co
-  VITE_SUPABASE_ANON_KEY=...
+  VITE_SUPABASE_ANON_KEY=your-anon-key
   ```
-- `src/data/supabaseClient.ts` creates the client from those env vars.
-- `src/data/supabaseRepository.ts` implements the same `Repository` interface
-  (`src/data/repository.ts`) that `LocalStorageRepository` used, so no component code
-  changed. `src/data/index.ts` now exports `new SupabaseRepository()` as the active
-  repository. `upsertLogEntry` uses `.upsert(..., { onConflict: 'event_type_id,date' })`,
-  which relies on the unique constraint below to update in place instead of duplicating rows.
-- `LocalStorageRepository` is still in the codebase as a working offline/no-backend
-  fallback — swap the export in `src/data/index.ts` back to it if needed.
+- `src/data/supabaseClient.ts` creates the client from those variables.
+- `src/data/index.ts` exports `new SupabaseRepository()` as the active repository.
+- `src/data/supabaseRepository.ts` implements the repository methods for creating, updating, deleting, and querying both event types and log entries.
 
-## Schema
+## Database schema
+
+Create the following tables in Supabase:
 
 ```sql
 create table event_types (
@@ -43,10 +41,7 @@ create table log_entries (
 
 ## Row Level Security
 
-Supabase's linter flags any table with no RLS as publicly writable by anyone holding the
-anon key. Since there's no auth yet (every row is already accessible regardless of who
-asks), RLS is enabled with a fully permissive policy — this satisfies the linter now and
-is the natural seam to tighten later:
+The current build does not yet include authentication, so the tables are configured with permissive RLS policies to keep the app working with the anonymous key:
 
 ```sql
 alter table event_types enable row level security;
@@ -65,8 +60,8 @@ create policy "Allow anon full access to log_entries"
   with check (true);
 ```
 
-## Multi-user (not built yet)
+## Notes about the current implementation
 
-When adding Supabase Auth sign-up/login: add a `user_id` filter to every query in
-`supabaseRepository.ts`, set `user_id` from the authenticated session on insert, and
-replace the permissive policies above with ones scoped to `auth.uid() = user_id`.
+- `upsertLogEntry` uses `.upsert(..., { onConflict: 'event_type_id,date' })`, so editing a score or note for the same day updates the existing row instead of creating duplicates.
+- The local storage repository remains available for offline or no-backend testing. To switch back to it, change the export in `src/data/index.ts`.
+- Multi-user authentication is not implemented yet. When auth is added, queries should be scoped by `user_id` and the policies should be tightened to `auth.uid() = user_id`.
