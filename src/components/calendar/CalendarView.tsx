@@ -75,25 +75,25 @@ export function CalendarView({ viewMode, eventTypes }: CalendarViewProps) {
       <div className="flex items-center justify-center gap-4 py-3">
         <button
           onClick={() => step(-1)}
-          className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+          className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
           aria-label="Previous"
         >
           <ChevronLeft size={20} />
         </button>
         <div className="flex flex-col items-center">
-          <span className="text-sm font-semibold text-slate-800">
+          <span className="text-sm font-semibold text-slate-800 dark:text-slate-100">
             {headerLabel(viewMode, currentDate)}
           </span>
           <button
             onClick={() => setCurrentDate(new Date())}
-            className="text-xs text-slate-400 hover:text-slate-600"
+            className="text-xs text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
           >
             Today
           </button>
         </div>
         <button
           onClick={() => step(1)}
-          className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+          className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
           aria-label="Next"
         >
           <ChevronRight size={20} />

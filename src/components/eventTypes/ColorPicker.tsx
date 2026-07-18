@@ -28,19 +28,21 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
             type="button"
             onClick={() => onChange(color)}
             className={`h-8 w-8 rounded-full border-2 ${
-              value.toLowerCase() === color ? 'border-slate-800' : 'border-transparent'
+              value.toLowerCase() === color
+                ? 'border-slate-800 dark:border-slate-200'
+                : 'border-transparent'
             }`}
             style={{ backgroundColor: color }}
           />
         ))}
       </div>
-      <label className="flex items-center gap-2 text-sm text-slate-600">
+      <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
         Custom
         <input
           type="color"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="h-8 w-12 cursor-pointer rounded border border-slate-200"
+          className="h-8 w-12 cursor-pointer rounded border border-slate-200 dark:border-slate-600"
         />
       </label>
     </div>

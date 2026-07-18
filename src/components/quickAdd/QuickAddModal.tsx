@@ -52,13 +52,15 @@ export function QuickAddModal({
         <div className="flex items-center gap-3">
           <Icon color={eventType.color} size={28} />
           <div>
-            <h2 className="text-lg font-semibold text-slate-800">{eventType.name}</h2>
-            <p className="text-xs text-slate-500">{dateKey}</p>
+            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
+              {eventType.name}
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{dateKey}</p>
           </div>
         </div>
 
         <div>
-          <div className="mb-1 flex items-center justify-between text-sm font-medium text-slate-600">
+          <div className="mb-1 flex items-center justify-between text-sm font-medium text-slate-600 dark:text-slate-300">
             <span>Score</span>
             <span>{score}/10</span>
           </div>
@@ -74,12 +76,14 @@ export function QuickAddModal({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-600">Note (optional)</label>
+          <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
+            Note (optional)
+          </label>
           <textarea
             value={note ?? ''}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
-            className="w-full resize-none rounded-lg border border-slate-200 p-2 text-sm focus:border-slate-400 focus:outline-none"
+            className="w-full resize-none rounded-lg border border-slate-200 p-2 text-sm text-slate-800 focus:border-slate-400 focus:outline-none dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:focus:border-slate-400"
             placeholder="How did it go?"
           />
         </div>
@@ -89,14 +93,14 @@ export function QuickAddModal({
             <button
               onClick={handleRemove}
               disabled={saving}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
             >
               Remove
             </button>
           ) : (
             <button
               onClick={onClose}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-500 hover:bg-slate-100"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700"
             >
               Cancel
             </button>

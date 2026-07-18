@@ -17,10 +17,12 @@ export function IconPicker({ value, onChange }: IconPickerProps) {
             type="button"
             onClick={() => onChange(name)}
             className={`flex items-center justify-center rounded-lg border p-2 ${
-              selected ? 'border-slate-800 bg-slate-100' : 'border-slate-200 hover:bg-slate-50'
+              selected
+                ? 'border-slate-800 bg-slate-100 dark:border-slate-300 dark:bg-slate-700'
+                : 'border-slate-200 hover:bg-slate-50 dark:border-slate-600 dark:hover:bg-slate-700'
             }`}
           >
-            <Icon size={20} className="text-slate-700" />
+            <Icon size={20} className="text-slate-700 dark:text-slate-200" />
           </button>
         );
       })}

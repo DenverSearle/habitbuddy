@@ -15,7 +15,7 @@ interface DenseGridProps {
 export function DenseGrid({ days, eventTypes, logEntries, onTapCell, iconSize = 32 }: DenseGridProps) {
   if (eventTypes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-2 py-16 text-center text-slate-500">
+      <div className="flex flex-col items-center justify-center gap-2 py-16 text-center text-slate-500 dark:text-slate-400">
         <p className="font-medium">No event types yet.</p>
         <p className="text-sm">Add one from "Manage Event Types" to start tracking.</p>
       </div>
@@ -27,14 +27,16 @@ export function DenseGrid({ days, eventTypes, logEntries, onTapCell, iconSize = 
       <table className="mx-auto border-separate" style={{ borderSpacing: 6 }}>
         <thead>
           <tr>
-            <th className="text-left text-xs font-medium text-slate-500" />
+            <th className="text-left text-xs font-medium text-slate-500 dark:text-slate-400" />
             {days.map((day) => (
               <th
                 key={day.toISOString()}
-                className="px-1 text-center text-xs font-medium text-slate-500"
+                className="px-1 text-center text-xs font-medium text-slate-500 dark:text-slate-400"
               >
                 <div>{format(day, 'EEEEE')}</div>
-                <div className={isToday(day) ? 'font-bold text-slate-800' : ''}>
+                <div
+                  className={isToday(day) ? 'font-bold text-slate-800 dark:text-slate-100' : ''}
+                >
                   {format(day, 'd')}
                 </div>
               </th>
@@ -44,7 +46,7 @@ export function DenseGrid({ days, eventTypes, logEntries, onTapCell, iconSize = 
         <tbody>
           {eventTypes.map((eventType) => (
             <tr key={eventType.id}>
-              <td className="max-w-[100px] truncate pr-3 text-right text-xs font-medium text-slate-600">
+              <td className="max-w-[100px] truncate pr-3 text-right text-xs font-medium text-slate-600 dark:text-slate-300">
                 {eventType.name}
               </td>
               {days.map((day) => {

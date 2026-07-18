@@ -12,7 +12,7 @@ interface DayViewProps {
 export function DayView({ dateKey, eventTypes, logEntries, onTapEventType }: DayViewProps) {
   if (eventTypes.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-2 py-16 text-center text-slate-500">
+      <div className="flex flex-col items-center justify-center gap-2 py-16 text-center text-slate-500 dark:text-slate-400">
         <p className="font-medium">No event types yet.</p>
         <p className="text-sm">Add one from "Manage Event Types" to start tracking.</p>
       </div>
@@ -35,7 +35,7 @@ export function DayView({ dateKey, eventTypes, logEntries, onTapEventType }: Day
               onClick={() => onTapEventType(eventType, entry)}
               title={eventType.name}
             />
-            <span className="max-w-[80px] truncate text-xs font-medium text-slate-600">
+            <span className="max-w-[80px] truncate text-xs font-medium text-slate-600 dark:text-slate-300">
               {eventType.name}
             </span>
           </div>
