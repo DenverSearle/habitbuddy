@@ -8,6 +8,12 @@ function unwrap<T>({ data, error }: { data: T | null; error: { message: string }
 }
 
 export class SupabaseRepository implements Repository {
+  private async getUserId(): Promise<string> {
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) throw new Error('Not authenticated');
+    return data.user.id;
+  }
+
   async getEventTypes(): Promise<EventType[]> {
     const result = await supabase
       .from('event_types')
@@ -17,7 +23,12 @@ export class SupabaseRepository implements Repository {
   }
 
   async createEventType(input: NewEventType): Promise<EventType> {
-    const result = await supabase.from('event_types').insert(input).select().single();
+    const user_id = await this.getUserId();
+    const result = await supabase
+      .from('event_types')
+      .insert({ ...input, user_id })
+      .select()
+      .single();
     return unwrap(result);
   }
 
@@ -46,9 +57,10 @@ export class SupabaseRepository implements Repository {
   }
 
   async upsertLogEntry(input: LogEntryInput): Promise<LogEntry> {
+    const user_id = await this.getUserId();
     const result = await supabase
       .from('log_entries')
-      .upsert(input, { onConflict: 'event_type_id,date' })
+      .upsert({ ...input, user_id }, { onConflict: 'event_type_id,date' })
       .select()
       .single();
     return unwrap(result);

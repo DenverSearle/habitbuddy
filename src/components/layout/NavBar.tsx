@@ -1,4 +1,4 @@
-import { Moon, Settings, Sun } from 'lucide-react';
+import { LogOut, Moon, Settings, Sun } from 'lucide-react';
 import type { Theme } from '../../hooks/useTheme';
 
 export type Screen = 'day' | 'week' | 'month' | 'manage';
@@ -8,6 +8,8 @@ interface NavBarProps {
   onScreenChange: (screen: Screen) => void;
   theme: Theme;
   onToggleTheme: () => void;
+  userEmail: string | null | undefined;
+  onSignOut: () => void;
 }
 
 const TABS: { key: Screen; label: string }[] = [
@@ -18,7 +20,14 @@ const TABS: { key: Screen; label: string }[] = [
 
 const APP_VERSION = 'v1.0';
 
-export function NavBar({ screen, onScreenChange, theme, onToggleTheme }: NavBarProps) {
+export function NavBar({
+  screen,
+  onScreenChange,
+  theme,
+  onToggleTheme,
+  userEmail,
+  onSignOut,
+}: NavBarProps) {
   return (
     <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
       <div className="flex items-baseline gap-2">
@@ -60,6 +69,18 @@ export function NavBar({ screen, onScreenChange, theme, onToggleTheme }: NavBarP
           title="Manage Event Types"
         >
           <Settings size={20} />
+        </button>
+        {userEmail && (
+          <span className="hidden max-w-[10rem] truncate text-xs text-slate-400 dark:text-slate-500 sm:inline">
+            {userEmail}
+          </span>
+        )}
+        <button
+          onClick={onSignOut}
+          className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
+          title="Sign out"
+        >
+          <LogOut size={20} />
         </button>
       </div>
     </header>

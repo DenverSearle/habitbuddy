@@ -16,7 +16,7 @@ HabitBuddy currently uses Supabase as its primary persistence layer. The app rea
 
 ## Database schema
 
-Create the following tables in Supabase:
+Create the following tables in Supabase, or run [`supabase/migrations/0001_add_user_auth.sql`](supabase/migrations/0001_add_user_auth.sql) against an existing pre-auth database (note: that migration truncates both tables first):
 
 ```sql
 create table event_types (
@@ -24,7 +24,7 @@ create table event_types (
   name text not null,
   icon text not null,
   color text not null,
-  user_id uuid null,
+  user_id uuid not null references auth.users(id) on delete cascade default auth.uid(),
   created_at timestamptz not null default now()
 );
 
@@ -34,34 +34,42 @@ create table log_entries (
   date date not null,
   score int not null check (score between 1 and 10),
   note text,
+  user_id uuid not null references auth.users(id) on delete cascade default auth.uid(),
   created_at timestamptz not null default now(),
   unique (event_type_id, date)
 );
 ```
 
+## Authentication
+
+Sign-in is Google-only via Supabase Auth. To enable it:
+
+1. In the Supabase dashboard, go to **Authentication → Providers → Google** and enable it. You'll need a Google Cloud OAuth 2.0 Client ID/Secret (from Google Cloud Console) — register Supabase's callback URL (`https://sllhqmvoxwuobijgerjz.supabase.co/auth/v1/callback`) as an authorized redirect URI there.
+2. In **Authentication → URL Configuration**, set the Site URL and add Redirect URLs for every origin the app runs from (e.g. `http://localhost:5173` for local dev, plus your production URL). `signInWithOAuth`'s `redirectTo` must match an allow-listed URL or the redirect fails.
+
 ## Row Level Security
 
-The current build does not yet include authentication, so the tables are configured with permissive RLS policies to keep the app working with the anonymous key:
+Tables are scoped per user; only the owning, authenticated user can read or write their own rows:
 
 ```sql
 alter table event_types enable row level security;
 alter table log_entries enable row level security;
 
-create policy "Allow anon full access to event_types"
+create policy "Users manage their own event_types"
   on event_types for all
-  to anon
-  using (true)
-  with check (true);
+  to authenticated
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
 
-create policy "Allow anon full access to log_entries"
+create policy "Users manage their own log_entries"
   on log_entries for all
-  to anon
-  using (true)
-  with check (true);
+  to authenticated
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
 ```
 
 ## Notes about the current implementation
 
 - `upsertLogEntry` uses `.upsert(..., { onConflict: 'event_type_id,date' })`, so editing a score or note for the same day updates the existing row instead of creating duplicates.
 - The local storage repository remains available for offline or no-backend testing. To switch back to it, change the export in `src/data/index.ts`.
-- Multi-user authentication is not implemented yet. When auth is added, queries should be scoped by `user_id` and the policies should be tightened to `auth.uid() = user_id`.
+- `SupabaseRepository` injects `user_id` from the authenticated session on `createEventType` and `upsertLogEntry`. Reads (`getEventTypes`, `getLogEntries`) and other writes rely entirely on RLS to scope rows to the signed-in user — there's no client-side `user_id` filtering.
