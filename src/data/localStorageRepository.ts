@@ -3,6 +3,7 @@ import type { Repository } from './repository';
 
 const EVENT_TYPES_KEY = 'habitbuddy_event_types';
 const LOG_ENTRIES_KEY = 'habitbuddy_log_entries';
+const LOCAL_USER_ID = 'local';
 
 function read<T>(key: string): T[] {
   const raw = localStorage.getItem(key);
@@ -30,7 +31,7 @@ export class LocalStorageRepository implements Repository {
       name: input.name,
       icon: input.icon,
       color: input.color,
-      user_id: null,
+      user_id: LOCAL_USER_ID,
       created_at: new Date().toISOString(),
     };
     eventTypes.push(eventType);
@@ -79,6 +80,7 @@ export class LocalStorageRepository implements Repository {
       date: input.date,
       score: input.score,
       note: input.note,
+      user_id: LOCAL_USER_ID,
       created_at: new Date().toISOString(),
     };
     logEntries.push(entry);

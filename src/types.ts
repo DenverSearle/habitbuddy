@@ -3,7 +3,7 @@ export interface EventType {
   name: string;
   icon: string;
   color: string;
-  user_id: string | null;
+  user_id: string;
   created_at: string;
 }
 
@@ -13,6 +13,7 @@ export interface LogEntry {
   date: string; // YYYY-MM-DD
   score: number; // 1-10
   note: string | null;
+  user_id: string;
   created_at: string;
 }
 

@@ -4,6 +4,7 @@ HabitBuddy is a lightweight habit and activity tracker built with React, TypeScr
 
 ## Current features
 
+- Google sign-in required; each user's event types and log entries are private to their account
 - Day, week, and month calendar navigation
 - Quick add and edit flows for daily entries
 - Detail view for existing entries with remove support
@@ -34,11 +35,12 @@ HabitBuddy is a lightweight habit and activity tracker built with React, TypeScr
    VITE_SUPABASE_URL=https://your-project.supabase.co
    VITE_SUPABASE_ANON_KEY=your-anon-key
    ```
-3. Start the development server:
+3. Apply the schema and enable Google sign-in — see [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for the migration SQL and the Google OAuth provider setup steps.
+4. Start the development server:
    ```bash
    npm run dev
    ```
-4. Build for production:
+5. Build for production:
    ```bash
    npm run build
    ```
@@ -58,7 +60,13 @@ HabitBuddy is a lightweight habit and activity tracker built with React, TypeScr
 - `src/components/quickAdd` and `src/components/logDetail` — entry logging and detail flows
 - `src/data` — repository abstraction plus Supabase and local storage implementations
 - `src/hooks/useTheme.ts` — persisted light/dark mode state
+- `src/hooks/useAuth.tsx` — auth context/provider around Supabase Auth (session, sign-in, sign-out)
+- `src/components/auth` — login screen shown to signed-out users
 
 ## Data layer
 
 The app uses a repository abstraction in `src/data/repository.ts`. The active implementation is `SupabaseRepository`, which is wired in `src/data/index.ts`. A `LocalStorageRepository` remains available as a fallback if you need to switch away from Supabase.
+
+## Authentication
+
+Sign-in is Google-only, via Supabase Auth (`useAuth` in `src/hooks/useAuth.tsx`). `App.tsx` renders the `LoginScreen` for signed-out visitors and gates the calendar/event-type UI behind an active session. Every `event_types`/`log_entries` row is scoped to the signed-in user, both by `SupabaseRepository` injecting `user_id` on writes and by row-level security policies enforcing `auth.uid() = user_id` on the database side. See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for enabling the Google provider and applying the schema/RLS migration.
