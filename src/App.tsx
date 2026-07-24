@@ -42,6 +42,7 @@ function App() {
         theme={theme}
         onToggleTheme={toggleTheme}
         userEmail={user.email}
+        avatarUrl={user.user_metadata.avatar_url ?? user.user_metadata.picture}
         onSignOut={signOut}
       />
       <main className="flex-1">
