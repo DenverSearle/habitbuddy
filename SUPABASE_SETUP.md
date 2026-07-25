@@ -46,6 +46,36 @@ Sign-in is Google-only via Supabase Auth. To enable it:
 
 1. In the Supabase dashboard, go to **Authentication → Providers → Google** and enable it. You'll need a Google Cloud OAuth 2.0 Client ID/Secret (from Google Cloud Console) — register Supabase's callback URL (`https://sllhqmvoxwuobijgerjz.supabase.co/auth/v1/callback`) as an authorized redirect URI there.
 2. In **Authentication → URL Configuration**, set the Site URL and add Redirect URLs for every origin the app runs from (e.g. `http://localhost:5173` for local dev, plus your production URL). `signInWithOAuth`'s `redirectTo` must match an allow-listed URL or the redirect fails.
+3. For the native Android/iOS apps (see below), also add `habitbuddy://auth-callback` to the Redirect URLs list — the native build uses a deep link instead of a browser redirect.
+
+## Mobile app (Capacitor)
+
+The web app is wrapped in [Capacitor](https://capacitorjs.com) to produce native Android/iOS builds — see `capacitor.config.ts` at the repo root. Key points:
+
+- Capacitor loads the **built** `dist/` output, not the dev server: `npm run cap:sync` runs `npm run build` then `npx cap sync` to push the latest web code into `android/`/`ios/`.
+- `npm run cap:android` opens the native project in Android Studio; `npm run cap:ios` does the same for Xcode (requires a Mac).
+- Google sign-in on native uses an in-app browser + the `habitbuddy://auth-callback` deep link (see `src/hooks/useAuth.tsx`) instead of the web's same-origin redirect — this requires the redirect URL above and the intent filter already committed in `android/app/src/main/AndroidManifest.xml` (and, once the iOS project exists, the matching `CFBundleURLTypes` entry in `Info.plist`).
+- App icon/splash source art lives in `resources/icon.svg` (rasterized via `npm run assets:generate`, which also re-runs `capacitor-assets generate` to regenerate the native icon/splash sets).
+- This Supabase project returns Google sign-in tokens via the URL hash fragment (`#access_token=...&refresh_token=...`, implicit flow) rather than a `?code=` param (PKCE), so the `appUrlOpen` handler in `useAuth.tsx` checks for both. Don't assume PKCE-only if touching this code.
+
+### Debugging native sign-in on a connected device
+
+If native Google sign-in stops working, the fastest way to see what's actually happening is to temporarily add logging back into the `appUrlOpen` handler and `signInWithGoogle` in `src/hooks/useAuth.tsx`:
+
+```ts
+// in the appUrlOpen listener, right after `if (!url.startsWith(NATIVE_REDIRECT_URL)) return;`
+console.log('[auth] appUrlOpen received:', url);
+// ...and after each supabase.auth.* call, log the returned `error` if present
+```
+
+Then rebuild and reinstall onto a connected device (USB or wireless `adb` debugging both work):
+```bash
+npm run build && npx cap sync android
+cd android && ./gradlew.bat assembleDebug
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb shell am force-stop <appId> && adb shell am start -n <appId>/.MainActivity
+```
+Capacitor pipes JS `console.log`/`warn`/`error` to `adb logcat` under the tag `Capacitor/Console` — filter with `adb logcat -d | grep -i "Capacitor/Console\|Capacitor/AppPlugin"` after reproducing the issue. This is how the implicit-vs-PKCE flow mismatch above was originally diagnosed. Remove the logging again once done.
 
 ## Row Level Security
 
