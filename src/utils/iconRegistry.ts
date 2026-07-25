@@ -21,6 +21,7 @@ import {
   Palette,
   Code,
   Briefcase,
+  Users,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -47,6 +48,7 @@ export const ICON_REGISTRY: Record<string, LucideIcon> = {
   palette: Palette,
   code: Code,
   briefcase: Briefcase,
+  users: Users,
 };
 
 export const ICON_NAMES = Object.keys(ICON_REGISTRY);

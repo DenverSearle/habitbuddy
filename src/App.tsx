@@ -45,7 +45,7 @@ function App() {
         avatarUrl={user.user_metadata.avatar_url ?? user.user_metadata.picture}
         onSignOut={signOut}
       />
-      <main className="flex-1">
+      <main className="flex-1 pb-[env(safe-area-inset-bottom)]">
         {screen === 'manage' ? (
           <EventTypeManager eventTypes={eventTypes} onChanged={loadEventTypes} />
         ) : (

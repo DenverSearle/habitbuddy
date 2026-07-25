@@ -31,7 +31,7 @@ export function NavBar({
   onSignOut,
 }: NavBarProps) {
   return (
-    <header className="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+    <header className="border-b border-slate-200 bg-white pt-[env(safe-area-inset-top)] dark:border-slate-700 dark:bg-slate-800">
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-baseline gap-2">
           <h1 className="text-lg font-bold text-slate-800 dark:text-slate-100">HabitBuddy</h1>

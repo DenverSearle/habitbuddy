@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Capacitor } from '@capacitor/core';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 export type Theme = 'light' | 'dark';
 
@@ -16,6 +18,9 @@ export function useTheme() {
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem(STORAGE_KEY, theme);
+    if (Capacitor.isNativePlatform()) {
+      StatusBar.setStyle({ style: theme === 'dark' ? Style.Dark : Style.Light });
+    }
   }, [theme]);
 
   function toggleTheme() {
