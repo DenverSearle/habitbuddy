@@ -1,7 +1,7 @@
 import { LogOut, Moon, Settings, Sun } from 'lucide-react';
 import type { Theme } from '../../hooks/useTheme';
 
-export type Screen = 'day' | 'week' | 'month' | 'manage';
+export type Screen = 'day' | 'week' | 'month' | 'stats' | 'manage';
 
 interface NavBarProps {
   screen: Screen;
@@ -17,6 +17,7 @@ const TABS: { key: Screen; label: string }[] = [
   { key: 'day', label: 'Day' },
   { key: 'week', label: 'Week' },
   { key: 'month', label: 'Month' },
+  { key: 'stats', label: 'Stats' },
 ];
 
 const APP_VERSION = 'v1.0';

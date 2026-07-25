@@ -8,6 +8,7 @@ import {
   addDays,
   addWeeks,
   addMonths,
+  subDays,
 } from 'date-fns';
 
 export const DATE_FORMAT = 'yyyy-MM-dd';
@@ -32,4 +33,8 @@ export function daysOfMonthGrid(date: Date): Date[] {
   });
 }
 
-export { addDays, addWeeks, addMonths, format };
+export function dateKeysInRange(start: Date, end: Date): string[] {
+  return eachDayOfInterval({ start, end }).map(toDateKey);
+}
+
+export { addDays, addWeeks, addMonths, subDays, format };

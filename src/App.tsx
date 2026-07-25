@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { NavBar, type Screen } from './components/layout/NavBar';
 import { CalendarView } from './components/calendar/CalendarView';
 import { EventTypeManager } from './components/eventTypes/EventTypeManager';
+import { StatsView } from './components/stats/StatsView';
 import { LoginScreen } from './components/auth/LoginScreen';
 import { repository } from './data';
 import { useAuth } from './hooks/useAuth';
@@ -48,6 +49,8 @@ function App() {
       <main className="flex-1 pb-[env(safe-area-inset-bottom)]">
         {screen === 'manage' ? (
           <EventTypeManager eventTypes={eventTypes} onChanged={loadEventTypes} />
+        ) : screen === 'stats' ? (
+          <StatsView eventTypes={eventTypes} />
         ) : (
           <CalendarView viewMode={screen} eventTypes={eventTypes} />
         )}
