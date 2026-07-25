@@ -1,5 +1,5 @@
 import type { EventType, LogEntry } from '../../types';
-import { DenseGrid } from './DenseGrid';
+import { MonthCalendarGrid } from './MonthCalendarGrid';
 import { daysOfMonthGrid } from '../../utils/date';
 
 interface MonthViewProps {
@@ -12,12 +12,12 @@ interface MonthViewProps {
 export function MonthView({ currentDate, eventTypes, logEntries, onTapCell }: MonthViewProps) {
   const days = daysOfMonthGrid(currentDate);
   return (
-    <DenseGrid
+    <MonthCalendarGrid
+      currentDate={currentDate}
       days={days}
       eventTypes={eventTypes}
       logEntries={logEntries}
       onTapCell={onTapCell}
-      iconSize={22}
     />
   );
 }
