@@ -8,18 +8,22 @@ import { Sparkline } from './Sparkline';
 interface HabitStatCardProps {
   eventType: EventType;
   scores: (number | null)[]; // oldest -> newest, aligned to the selected range
+  onSelect: () => void;
 }
 
 const HEAT_STRIP_DAYS = 30;
 
-export function HabitStatCard({ eventType, scores }: HabitStatCardProps) {
+export function HabitStatCard({ eventType, scores, onSelect }: HabitStatCardProps) {
   const avg = average(scores);
   const streak = currentStreak(scores);
   const consistency = consistencyPct(scores);
   const recent = scores.slice(-HEAT_STRIP_DAYS);
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800">
+    <div
+      onClick={onSelect}
+      className="flex cursor-pointer flex-col gap-2 rounded-lg border border-slate-200 bg-white p-3 transition hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600"
+    >
       <div className="flex items-center gap-2">
         <EventIcon
           icon={getIcon(eventType.icon)}
