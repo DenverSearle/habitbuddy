@@ -5,6 +5,7 @@ import { dateKeysInRange, format, subDays, toDateKey } from '../../utils/date';
 import { getIcon } from '../../utils/iconRegistry';
 import { buildDailySeries, trendDelta } from '../../utils/stats';
 import { EventIcon } from '../calendar/EventIcon';
+import { HabitEntryListModal } from './HabitEntryListModal';
 import { HabitStatCard } from './HabitStatCard';
 
 interface StatsViewProps {
@@ -24,6 +25,7 @@ export function StatsView({ eventTypes }: StatsViewProps) {
   const [range, setRange] = useState<RangeKey>('30d');
   const [entries, setEntries] = useState<LogEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedEventType, setSelectedEventType] = useState<EventType | null>(null);
 
   const { start, end, dateKeys } = useMemo(() => {
     const today = new Date();
@@ -131,9 +133,22 @@ export function StatsView({ eventTypes }: StatsViewProps) {
       ) : (
         <div className="grid grid-cols-2 gap-2">
           {habitSeries.map(({ eventType, scores }) => (
-            <HabitStatCard key={eventType.id} eventType={eventType} scores={scores} />
+            <HabitStatCard
+              key={eventType.id}
+              eventType={eventType}
+              scores={scores}
+              onSelect={() => setSelectedEventType(eventType)}
+            />
           ))}
         </div>
+      )}
+
+      {selectedEventType && (
+        <HabitEntryListModal
+          eventType={selectedEventType}
+          entries={entries.filter((e) => e.event_type_id === selectedEventType.id)}
+          onClose={() => setSelectedEventType(null)}
+        />
       )}
     </div>
   );
