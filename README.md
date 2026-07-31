@@ -1,6 +1,6 @@
-# HabitBuddy
+# Habit Buddy
 
-HabitBuddy is a lightweight habit and activity tracker built with React, TypeScript, Vite, Tailwind CSS, and Supabase. The app lets you create reusable event types, then log scores and notes for any day in a day, week, or month calendar view.
+Habit Buddy is a lightweight habit and activity tracker built with React, TypeScript, Vite, Tailwind CSS, and Supabase. The app lets you create reusable event types, then log scores and notes for any day in a day, week, or month calendar view.
 
 ## Current features
 

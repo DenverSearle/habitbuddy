@@ -5,7 +5,7 @@ interface BrandMarkProps {
   className?: string;
 }
 
-/** The HabitBuddy logo, inlined so it can be sized and animated. Mirrors `public/favicon.svg`. */
+/** The Habit Buddy logo, inlined so it can be sized and animated. Mirrors `public/favicon.svg`. */
 export function BrandMark({ size = 60, className }: BrandMarkProps) {
   return (
     <svg
@@ -14,7 +14,7 @@ export function BrandMark({ size = 60, className }: BrandMarkProps) {
       viewBox="0 0 90 90"
       className={className}
       role="img"
-      aria-label="HabitBuddy"
+      aria-label="Habit Buddy"
     >
       <circle cx="30" cy="30" r="24" fill={BRAND_COLORS.coral} opacity="0.85" />
       <circle cx="60" cy="30" r="24" fill={BRAND_COLORS.gold} opacity="0.85" />

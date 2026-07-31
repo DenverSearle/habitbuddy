@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">HabitBuddy</string>
-    <string name="title_activity_main">HabitBuddy</string>
+    <string name="app_name">Habit Buddy</string>
+    <string name="title_activity_main">Habit Buddy</string>
     <string name="package_name">za.co.deezineit.habitbuddy</string>
     <string name="custom_url_scheme">za.co.deezineit.habitbuddy</string>
 </resources>
