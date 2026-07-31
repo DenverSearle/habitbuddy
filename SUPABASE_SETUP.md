@@ -1,6 +1,6 @@
-# Supabase setup for HabitBuddy
+# Supabase setup for Habit Buddy
 
-HabitBuddy currently uses Supabase as its primary persistence layer. The app reads and writes event types and daily log entries through the repository abstraction in `src/data`, with the active implementation pointing at Supabase.
+Habit Buddy currently uses Supabase as its primary persistence layer. The app reads and writes event types and daily log entries through the repository abstraction in `src/data`, with the active implementation pointing at Supabase.
 
 ## Current configuration
 
