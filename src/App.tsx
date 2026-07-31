@@ -4,6 +4,7 @@ import { CalendarView } from './components/calendar/CalendarView';
 import { EventTypeManager } from './components/eventTypes/EventTypeManager';
 import { StatsView } from './components/stats/StatsView';
 import { LoginScreen } from './components/auth/LoginScreen';
+import { SplashScreen } from './components/layout/SplashScreen';
 import { repository } from './data';
 import { useAuth } from './hooks/useAuth';
 import { useTheme } from './hooks/useTheme';
@@ -28,7 +29,7 @@ function App() {
   }, [user, loadEventTypes]);
 
   if (loading) {
-    return <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-900" />;
+    return <SplashScreen />;
   }
 
   if (!user) {
