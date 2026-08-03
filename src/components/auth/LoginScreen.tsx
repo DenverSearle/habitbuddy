@@ -2,21 +2,9 @@ import { useState } from 'react';
 import { Droplet, Flame, LayoutGrid, Loader2, type LucideIcon } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { BRAND_COLORS } from '../../utils/brand';
-import { hexWithAlpha } from '../../utils/stats';
+import { BrandBloom } from '../layout/BrandBloom';
 import { BrandMark } from '../layout/BrandMark';
 import { GoogleIcon } from './GoogleIcon';
-
-/**
- * The mark's four colors bloomed across the screen. Sized in vmin so the wash keeps its
- * proportions from a phone up to a desktop, and faded to zero alpha (not `transparent`,
- * which can interpolate through grey).
- */
-const BLOOM = [
-  `radial-gradient(70vmin 65vmin at 12% 8%, ${hexWithAlpha(BRAND_COLORS.coral, 0.38)}, ${hexWithAlpha(BRAND_COLORS.coral, 0)} 70%)`,
-  `radial-gradient(65vmin 60vmin at 92% 18%, ${hexWithAlpha(BRAND_COLORS.gold, 0.36)}, ${hexWithAlpha(BRAND_COLORS.gold, 0)} 70%)`,
-  `radial-gradient(75vmin 75vmin at 88% 88%, ${hexWithAlpha(BRAND_COLORS.violet, 0.38)}, ${hexWithAlpha(BRAND_COLORS.violet, 0)} 70%)`,
-  `radial-gradient(70vmin 70vmin at 8% 82%, ${hexWithAlpha(BRAND_COLORS.teal, 0.36)}, ${hexWithAlpha(BRAND_COLORS.teal, 0)} 70%)`,
-].join(', ');
 
 interface Feature {
   icon: LucideIcon;
@@ -66,11 +54,7 @@ export function LoginScreen() {
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-slate-50 px-6 pt-[calc(2.5rem+env(safe-area-inset-top))] pb-[calc(2.5rem+env(safe-area-inset-bottom))] dark:bg-slate-900">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 dark:opacity-60"
-        style={{ background: BLOOM }}
-      />
+      <BrandBloom />
 
       <div className="relative flex w-full max-w-sm flex-col">
         <div className="flex flex-col items-center gap-3">

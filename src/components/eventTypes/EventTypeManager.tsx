@@ -9,6 +9,8 @@ import { getIcon } from '../../utils/iconRegistry';
 interface EventTypeManagerProps {
   eventTypes: EventType[];
   onChanged: () => void;
+  /** Open straight into the create form — used when arriving from the welcome screen. */
+  startInCreateMode?: boolean;
 }
 
 interface FormState {
@@ -20,8 +22,12 @@ interface FormState {
 
 const EMPTY_FORM: FormState = { name: '', icon: 'activity', color: '#3b82f6' };
 
-export function EventTypeManager({ eventTypes, onChanged }: EventTypeManagerProps) {
-  const [form, setForm] = useState<FormState | null>(null);
+export function EventTypeManager({
+  eventTypes,
+  onChanged,
+  startInCreateMode = false,
+}: EventTypeManagerProps) {
+  const [form, setForm] = useState<FormState | null>(startInCreateMode ? EMPTY_FORM : null);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
